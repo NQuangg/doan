@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class Classroom {
     @Id
-    @GeneratedValue
     private Integer id;
 
     @Column(nullable = false)

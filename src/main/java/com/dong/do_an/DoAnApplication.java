@@ -9,15 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 @RequiredArgsConstructor
 public class DoAnApplication {
-    private final PasswordEncoder passwordEncoder;
-
-    @PostConstruct
-    public void test() {
-        System.out.println("QUANGG TEST PASSWORD: " + passwordEncoder.encode("123456"));
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(DoAnApplication.class, args);
     }
-
 }

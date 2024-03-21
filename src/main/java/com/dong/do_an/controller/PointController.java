@@ -31,9 +31,9 @@ public class PointController {
         semesterPointId.setSemesterId(pointDTO.getSemesterId());
 
         final Optional<SemesterPoint> optionalSemesterPoint = pointRepository.findById(semesterPointId);
-        if (!optionalSemesterPoint.isPresent()) {
+        if (optionalSemesterPoint.isEmpty()) {
             final Optional<Semester> optionalSemester = semesterRepository.findById(pointDTO.getSemesterId());
-            if (!optionalSemester.isPresent()) {
+            if (optionalSemester.isEmpty()) {
                 return ResponseEntity
                         .ok()
                         .body(

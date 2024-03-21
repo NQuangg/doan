@@ -1,5 +1,6 @@
 package com.dong.do_an.security;
 
+import com.dong.do_an.entity.SystemUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -27,13 +29,19 @@ public class JwtService {
     }
 
     public String generateToken(
+            String email
+    ) {
+        return generateToken(new HashMap<>(), email);
+    }
+
+    public String generateToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            String email
     ) {
         return Jwts
                 .builder()
                 .claims(extraClaims)
-                .subject(userDetails.getUsername())
+                .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSignInKey())
