@@ -119,32 +119,4 @@ public class AuthenticationController {
                                 .build()
                 );
     }
-
-    @GetMapping("profile")
-    public ResponseEntity getProfile(Authentication authentication) {
-        final Optional<SystemUser> optionalSystemUser = userRepository.findById(authentication.getName());
-        if (optionalSystemUser.isPresent()) {
-            final SystemUser systemUser = optionalSystemUser.get();
-            systemUser.setPassword(null);
-
-            return ResponseEntity
-                    .ok()
-                    .body(
-                            BaseResponse
-                                    .builder()
-                                    .code(StatusCode.SUCCESS)
-                                    .data(systemUser)
-                                    .build()
-                    );
-        } else {
-            return ResponseEntity
-                    .ok()
-                    .body(
-                            BaseResponse
-                                    .builder()
-                                    .code(StatusCode.NOT_FOUND)
-                                    .build()
-                    );
-        }
-    }
 }
