@@ -2,6 +2,8 @@ package com.dong.do_an.controller;
 
 import com.dong.do_an.constants.StatusCode;
 import com.dong.do_an.dto.ChangePasswordDTO;
+import com.dong.do_an.dto.DetailDTO;
+import com.dong.do_an.dto.UserEmailDTO;
 import com.dong.do_an.entity.Role;
 import com.dong.do_an.entity.SystemUser;
 import com.dong.do_an.model.BaseResponse;
@@ -113,6 +115,44 @@ public class UserController {
                                 .builder()
                                 .code(StatusCode.SUCCESS)
                                 .data(listSystemUser)
+                                .build()
+                );
+    }
+
+    @PostMapping("delete")
+    @Transactional
+    public ResponseEntity deleteUser(UserEmailDTO userEmailDTO) {
+        final Optional<SystemUser> optionalSystemUser = userRepository.findById(userEmailDTO.getEmail());
+        if (optionalSystemUser.isEmpty()) {
+            return ResponseEntity
+                    .ok()
+                    .body(
+                            BaseResponse
+                                    .builder()
+                                    .code(StatusCode.NOT_FOUND)
+                                    .build()
+                    );
+        }
+
+        final SystemUser systemUser = optionalSystemUser.get();
+        if (systemUser.getRole().equals(Role.ADMIN)) {
+            return ResponseEntity
+                    .ok()
+                    .body(
+                            BaseResponse
+                                    .builder()
+                                    .code(StatusCode.CANNOT_DELETE_ADMIN)
+                                    .build()
+                    );
+        }
+
+        userRepository.deleteById(systemUser.getEmail());
+        return ResponseEntity
+                .ok()
+                .body(
+                        BaseResponse
+                                .builder()
+                                .code(StatusCode.SUCCESS)
                                 .build()
                 );
     }

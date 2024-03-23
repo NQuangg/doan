@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SemesterController {
 
-    private SemesterRepository repository;
+    final private SemesterRepository repository;
 
     @GetMapping("detail")
     public ResponseEntity getDetailSemester(@RequestBody DetailDTO detailDTO) {
