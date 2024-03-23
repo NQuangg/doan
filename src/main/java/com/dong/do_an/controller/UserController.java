@@ -2,6 +2,7 @@ package com.dong.do_an.controller;
 
 import com.dong.do_an.constants.StatusCode;
 import com.dong.do_an.dto.ChangePasswordDTO;
+import com.dong.do_an.entity.Role;
 import com.dong.do_an.entity.SystemUser;
 import com.dong.do_an.model.BaseResponse;
 import com.dong.do_an.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,7 +52,6 @@ public class UserController {
                     );
         }
     }
-
 
     @PostMapping("change_password")
     @Transactional
@@ -98,6 +99,20 @@ public class UserController {
                         BaseResponse
                                 .builder()
                                 .code(StatusCode.SUCCESS)
+                                .build()
+                );
+    }
+
+    @GetMapping("list")
+    public ResponseEntity getListUser() {
+        final List<SystemUser> listSystemUser = userRepository.getAllUser(Role.USER);
+        return ResponseEntity
+                .ok()
+                .body(
+                        BaseResponse
+                                .builder()
+                                .code(StatusCode.SUCCESS)
+                                .data(listSystemUser)
                                 .build()
                 );
     }
