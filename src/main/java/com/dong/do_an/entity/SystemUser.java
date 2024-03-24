@@ -30,6 +30,9 @@ public class SystemUser {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
+    private Boolean isFemale;
+
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)

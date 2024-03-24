@@ -22,5 +22,7 @@ public class RegisterUserDTO {
 
     private String phoneNumber;
 
+    private Boolean isFemale;
+
     private Integer classroomId;
 }

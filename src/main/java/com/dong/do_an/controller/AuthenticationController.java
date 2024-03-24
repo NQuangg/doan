@@ -45,6 +45,7 @@ public class AuthenticationController {
         systemUser.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
         systemUser.setBirthDate(registerUserDTO.getBirthDate());
         systemUser.setPhoneNumber(registerUserDTO.getPhoneNumber());
+        systemUser.setIsFemale(registerUserDTO.getIsFemale());
         systemUser.setRole(Role.USER);
 
         final Classroom classroom = new Classroom();
@@ -87,15 +88,37 @@ public class AuthenticationController {
     @PostMapping("login")
     @Transactional
     public ResponseEntity login(@RequestBody LoginDTO loginDTO) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDTO.getEmail(),
-                        loginDTO.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginDTO.getEmail(),
+                            loginDTO.getPassword()
+                    )
+            );
+        } catch (Exception e) {
+            return ResponseEntity
+                    .ok()
+                    .body(
+                            BaseResponse
+                                    .builder()
+                                    .code(StatusCode.AUTHENTICATION_FAILED)
+                                    .build()
+                    );
+        }
 
-        final SystemUser systemUser = userRepository.findById(loginDTO.getEmail()).orElseThrow();
-        final String jwtToken = jwtService.generateToken(systemUser.getEmail());
+        final Optional<SystemUser> optionalSystemUser = userRepository.findById(loginDTO.getEmail());
+        if (optionalSystemUser.isEmpty()) {
+            return ResponseEntity
+                    .ok()
+                    .body(
+                            BaseResponse
+                                    .builder()
+                                    .code(StatusCode.NOT_FOUND)
+                                    .build()
+                    );
+        }
+
+        final String jwtToken = jwtService.generateToken(optionalSystemUser.get().getEmail());
         return ResponseEntity
                 .ok()
                 .body(

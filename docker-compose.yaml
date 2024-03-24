@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:12.18-bullseye
     restart: always
     environment:
       POSTGRES_PASSWORD: password
