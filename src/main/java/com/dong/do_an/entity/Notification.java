@@ -1,5 +1,6 @@
 package com.dong.do_an.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -26,8 +27,10 @@ public class Notification {
 
     private String description;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date startDate;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date endDate;
 
     private String imageUrl;
