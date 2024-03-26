@@ -3,6 +3,7 @@ package com.dong.do_an.controller;
 import com.dong.do_an.constants.StatusCode;
 import com.dong.do_an.dto.ChangePasswordDTO;
 import com.dong.do_an.dto.DetailDTO;
+import com.dong.do_an.dto.UpdateUserDTO;
 import com.dong.do_an.dto.UserEmailDTO;
 import com.dong.do_an.entity.Role;
 import com.dong.do_an.entity.SystemUser;
@@ -105,6 +106,28 @@ public class UserController {
                 );
     }
 
+
+    @PostMapping("update")
+    @Transactional
+    public ResponseEntity update(@RequestBody UpdateUserDTO updateUserDTO) {
+        final SystemUser systemUser = userRepository.findById(updateUserDTO.getEmail()).orElseThrow();
+        systemUser.setName(updateUserDTO.getName());
+        systemUser.setBirthDate(updateUserDTO.getBirthDate());
+        systemUser.setPhoneNumber(updateUserDTO.getPhoneNumber());
+        systemUser.setImageUrl(updateUserDTO.getImageUrl());
+
+        userRepository.save(systemUser);
+
+        return ResponseEntity
+                .ok()
+                .body(
+                        BaseResponse
+                                .builder()
+                                .code(StatusCode.SUCCESS)
+                                .build()
+                );
+    }
+
     @GetMapping("list")
     public ResponseEntity getListUser() {
         final List<SystemUser> listSystemUser = userRepository.getAllUser(Role.USER);
@@ -117,6 +140,31 @@ public class UserController {
                                 .data(listSystemUser)
                                 .build()
                 );
+    }
+
+    @GetMapping("detail")
+    public ResponseEntity getDetailUser(@RequestBody UserEmailDTO userEmailDTO) {
+        final Optional<SystemUser> optionalSystemUser = userRepository.findById(userEmailDTO.getEmail());
+        if (optionalSystemUser.isEmpty()) {
+            return ResponseEntity
+                    .ok()
+                    .body(
+                            BaseResponse
+                                    .builder()
+                                    .code(StatusCode.NOT_FOUND)
+                                    .build()
+                    );
+        } else {
+            return ResponseEntity
+                    .ok()
+                    .body(
+                            BaseResponse
+                                    .builder()
+                                    .code(StatusCode.SUCCESS)
+                                    .data(optionalSystemUser.get())
+                                    .build()
+                    );
+        }
     }
 
     @PostMapping("delete")

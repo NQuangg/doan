@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -51,27 +52,6 @@ public class AuthenticationController {
         final Classroom classroom = new Classroom();
         classroom.setId(registerUserDTO.getClassroomId());
         systemUser.setClassroom(classroom);
-
-        userRepository.save(systemUser);
-
-        return ResponseEntity
-                .ok()
-                .body(
-                        BaseResponse
-                                .builder()
-                                .code(StatusCode.SUCCESS)
-                                .build()
-                );
-    }
-
-    @PostMapping("update")
-    @Transactional
-    public ResponseEntity update(@RequestBody UpdateUserDTO updateUserDTO) {
-        final SystemUser systemUser = userRepository.findById(updateUserDTO.getEmail()).orElseThrow();
-        systemUser.setName(updateUserDTO.getName());
-        systemUser.setBirthDate(updateUserDTO.getBirthDate());
-        systemUser.setPhoneNumber(updateUserDTO.getPhoneNumber());
-        systemUser.setImageUrl(updateUserDTO.getImageUrl());
 
         userRepository.save(systemUser);
 
