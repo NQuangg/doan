@@ -17,8 +17,6 @@ public class RegisterUserDTO {
 
     private String name;
 
-    private String password;
-
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date birthDate;
 

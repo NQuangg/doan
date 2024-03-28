@@ -9,6 +9,17 @@ spring:
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: fyongtiendong@gmail.com
+    password: djmdtegfrnnzdsdo
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 upload:
   folder: src/main/resources/uploads/
